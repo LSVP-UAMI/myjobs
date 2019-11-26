@@ -1,0 +1,52 @@
+{
+    "size": 500,
+    "query": {
+        "bool": {
+            "filter": [
+                {
+                    "range": {
+                        "@start": {
+                            "gte": "1568746391945",
+                            "lte": "1568832791945",
+                            "format": "epoch_millis"
+                        }
+                    }
+                },
+                {
+                    "query_string": {
+                        "analyze_wildcard": true,
+                        "query": " * "
+                    }
+                }
+            ]
+        }
+    },
+    "sort": [
+        {
+            "jobid": "desc"
+        }
+    ],
+    "script_fields": {},
+    "docvalue_fields": [
+        "@start"
+    ],
+    "_source": [
+        "jobid",
+        "username",
+        "job_name",
+        "cpu_hours",
+        "nodes",
+        "@start",
+        "@end",
+        "@submit",
+        "elapsed",
+        "state"
+    ],
+    "aggs": {
+        "total_cpu": {
+            "sum": {
+                "field": "cpu_hours"
+            }
+        }
+    }
+}

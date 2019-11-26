@@ -1,0 +1,6 @@
+node_modules/*
+package-lock.json
+explorer.js
+test.js
+myjobs.simg
+err.log
