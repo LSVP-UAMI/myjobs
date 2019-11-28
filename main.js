@@ -13,13 +13,14 @@ setup().catch(console.log)
 async function setup() {
     const cli = meow(`
 	Usage
-	  $ myjobs <>
+	  $ myjobs [-g|--group]
 
-	Options
-	  --group, -g  Mostrar los jobs del grupo (solo para investigadores)
+    Options
+      --help, -h   Mostrar este mensaje de ayuda.
+	  --group, -g  Mostrar los jobs del grupo (solo para investigadores).
 
 	Examples
-	  $ myjobs -g usuario
+	  $ myjobs -g
 `, {
         flags: {
             group: {

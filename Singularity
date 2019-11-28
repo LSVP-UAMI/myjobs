@@ -3,14 +3,44 @@ Bootstrap: docker
 From: node:buster-slim
 
 %runscript
+   grupo=false 
+   opt="$USER"
+
+   if [ $# -gt 0 ]; then
+      case "$1" in
+         -h|--help)
+            node main.js --help
+            exit 1
+            ;;
+         -g|--group)
+            grupo=true
+            opt="-g $opt"
+            shift
+            ;;
+         *)
+            echo  "La opcion $1 es invalida."
+            node main.js --help
+            exit 1
+            ;;
+      esac
+   fi
+
    uid=$(id -u $USER)
+
    if [ $uid -gt 5000 ] && [ $uid -lt 6001 ]
    then
       cd /myjobs
-      node main.js -g $USER 2> /dev/null
+      node main.js "$opt" 2> /dev/null
    else
+      if [ "$grupo" = true ]; then
+         echo 'Las opciones -g y --group son solo para investigadores.'
+         node main.js --help
+         exit 1
+      fi
       echo Acceso denegado
    fi
+
+
 
 %setup
    mkdir -p ${SINGULARITY_ROOTFS}/myjobs
@@ -27,5 +57,4 @@ From: node:buster-slim
 
 %post 
    cd /myjobs
-   touch ./err.log
    npm install
