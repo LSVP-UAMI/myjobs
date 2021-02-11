@@ -6,6 +6,8 @@ var blessed = require('blessed')
     , itable = require('./inftable.js')
     , meow = require('meow')
 
+const SLURMDB = process.env.ES_SLURM_DB
+    , TGDB = process.env.TELEGRAF_DB
 
 
 setup().catch(console.log)
@@ -30,7 +32,19 @@ async function setup() {
             }
         }
     });
+    if(typeof SLURMDB=='undefined' || SLURMDB == null){
+    	console.log("ERROR: No hay base de datos de SLURM establecida.")
+	return process.exit()
+    }
+    if(typeof TGDB=='undefined' || TGDB == null){
+    	console.log("ERROR: No hay base de datos de telegraf establecida.")
+	return process.exit()
+    }
     var screen = blessed.screen()
+    screen.key(['escape', 'q', 'C-c'], function (ch, key) {
+        return process.exit(0);
+    });   
+
     var grid = new contrib.grid({ rows: 7, cols: 5, screen: screen })
 
     var jobsTable = grid.set(0, 0, 7, 2, contrib.table, {
@@ -105,10 +119,7 @@ async function setup() {
 
 
     await table.setup(jobsTable, cli.input[0], cli.flags.group);
-
-    screen.key(['escape', 'q', 'C-c'], function (ch, key) {
-        return process.exit(0);
-    });
+    
     screen.on('resize', function () {
         ramLine.emit('attach');
         cpuLine.emit('attach')

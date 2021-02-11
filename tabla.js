@@ -1,8 +1,9 @@
 var fs = require('fs');
 exports.data = [];
 
+const SLURMDB = process.env.ES_SLURM_DB
 const { Client } = require('@elastic/elasticsearch')
-const client = new Client({ node: 'http://148.206.50.80:9200' })
+const client = new Client({ node: 'http://'+SLURMDB })
 
 let query = JSON.parse(fs.readFileSync('query.json'))
 var now = new Date().getTime()
@@ -28,11 +29,11 @@ exports.setup = async function (tabla, user, group) {
 
     tabla.setData({
         headers: headers
-        , data: await getData(group)
+        , data: await getData(user, group)
     })
 }
 
-async function getData(group) {
+async function getData(user, group) {
     const { body } = await client.search({
         index: 'slurm',
         type: 'jobcomp',
@@ -67,7 +68,7 @@ async function getData(group) {
             state: src.state.toString()
         }
         exports.data.push(job)
-        if (group)
+        if (user == undefined || group)
             var r = [src.jobid, src.username, src.job_name]
         else
             var r = [src.jobid, src.job_name]

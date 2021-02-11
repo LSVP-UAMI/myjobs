@@ -55,6 +55,12 @@ From: node:alpine
    ./query.json app/query.json
    ./package.json app/package.json
 
+%environment
+   ES_SLURM_DB='148.206.50.80:9200'
+   export ES_SLURM_DB
+   TELEGRAF_DB='148.206.50.80:32785'
+   export TELEGRAF_DB
+
 %post 
    cd /app
    npm install

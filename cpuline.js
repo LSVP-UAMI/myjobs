@@ -1,11 +1,12 @@
 const axios = require('axios')
+const TGDB = process.env.TELEGRAF_DB
 color = ['yellow', 'green', 'blue']
 
 exports.setData = async function (line, job) {
     //console.error(job.cpuhrs)
     //console.error(job.nodesArr)
     if (parseFloat(job.cpuhrs) > 0) {
-        var template = `http://148.206.50.80:32785/render?target=aliasByNode(scale(telegraf.${nodes(job.nodesArr)}.system.carga.5m, ${scale(job.nodesArr)}), 1)&from=${job.start}&until=${job.end}&format=json&maxDataPoints=100`
+        var template = `http://`+TGDB+`/render?target=aliasByNode(scale(telegraf.${nodes(job.nodesArr)}.system.carga.5m, ${scale(job.nodesArr)}), 1)&from=${job.start}&until=${job.end}&format=json&maxDataPoints=100`
         //console.error(template)
         var res = await axios({ url: template, method: "POST" }).catch((error) => {
             console.error(error)
