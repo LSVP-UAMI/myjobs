@@ -1,4 +1,6 @@
 node_modules/*
+myjobs/*
+myjobs
 package-lock.json
 explorer.js
 test.js

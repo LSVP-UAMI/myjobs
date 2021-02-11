@@ -1,6 +1,6 @@
 Bootstrap: docker
 
-From: node:buster-slim
+From: node:alpine
 
 %runscript
    grupo=false 
@@ -29,7 +29,7 @@ From: node:buster-slim
 
    if [ $uid -gt 5000 ] && [ $uid -lt 6001 ]
    then
-      cd /myjobs
+      cd /app
       node main.js "$opt" 2> /dev/null
    else
       if [ "$grupo" = true ]; then
@@ -43,18 +43,18 @@ From: node:buster-slim
 
 
 %setup
-   mkdir -p ${SINGULARITY_ROOTFS}/myjobs
+   mkdir -p ${SINGULARITY_ROOTFS}/app
 
 
 %files
-   ./main.js myjobs/main.js
-   ./tabla.js myjobs/tabla.js
-   ./cpuline.js myjobs/cpuline.js
-   ./inftable.js myjobs/inftable.js
-   ./ramline.js myjobs/ramline.js
-   ./query.json myjobs/query.json
-   ./package.json myjobs/package.json
+   ./main.js app/main.js
+   ./tabla.js app/tabla.js
+   ./cpuline.js app/cpuline.js
+   ./inftable.js app/inftable.js
+   ./ramline.js app/ramline.js
+   ./query.json app/query.json
+   ./package.json app/package.json
 
 %post 
-   cd /myjobs
+   cd /app
    npm install
