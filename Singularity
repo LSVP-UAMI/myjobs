@@ -3,44 +3,34 @@ Bootstrap: docker
 From: node:alpine
 
 %runscript
-   grupo=false 
-   opt="$USER"
+   grupo=false
+   debug=false
+   usr="$USER"
 
    if [ $# -gt 0 ]; then
       case "$1" in
-         -h|--help)
-            node main.js --help
-            exit 1
-            ;;
-         -g|--group)
-            grupo=true
-            opt="-g $opt"
-            shift
-            ;;
-         *)
-            echo  "La opcion $1 es invalida."
-            node main.js --help
-            exit 1
+         --debug)
+            debug=true
+            shift 1
             ;;
       esac
    fi
 
-   uid=$(id -u $USER)
+   cd /app
 
-   if [ $uid -gt 5000 ] && [ $uid -lt 6001 ]
-   then
-      cd /app
-      node main.js "$opt" 2> /dev/null
+   if [ $debug = true ]; then
+      node main.js $@
    else
-      if [ "$grupo" = true ]; then
-         echo 'Las opciones -g y --group son solo para investigadores.'
-         node main.js --help
-         exit 1
+      uid=$(id -u $USER)
+      if [ $uid -gt 5000 ] && [ $uid -lt 6001 ]
+      then
+         echo 'Investigador $usr'
+         node main.js "$usr" $@ 
+      else
+         echo 'Colaborador $usr'
+         node main.js "$usr" $@
       fi
-      echo Acceso denegado
    fi
-
-
 
 %setup
    mkdir -p ${SINGULARITY_ROOTFS}/app
@@ -62,5 +52,8 @@ From: node:alpine
    export TELEGRAF_DB
 
 %post 
+   mkdir /LUSTRE
+   touch /etc/localtime
    cd /app
    npm install
+   chmod 775 /app/*

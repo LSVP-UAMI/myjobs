@@ -32,6 +32,12 @@ async function setup() {
             }
         }
     });
+
+    if (cli.flags.help){
+        cli.showHelp()
+        process.exit()
+    }
+
     if(typeof SLURMDB=='undefined' || SLURMDB == null){
     	console.log("ERROR: No hay base de datos de SLURM establecida.")
 	return process.exit()
@@ -125,5 +131,13 @@ async function setup() {
         cpuLine.emit('attach')
     });
     jobsTable.focus()
+
+    blessed.text({
+        parent:screen,
+        left:0,
+        bottom:0,
+        content:'Esc, q, Ctr-c para salir.',
+    })
+
     screen.render()
 }
