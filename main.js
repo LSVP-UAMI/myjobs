@@ -18,17 +18,26 @@ async function setup() {
 	  $ myjobs [-g|--group]
 
     Options
-      --help, -h   Mostrar este mensaje de ayuda.
-	  --group, -g  Mostrar los jobs del grupo (solo para investigadores).
+      --help, -h        Mostrar este mensaje de ayuda.
+      --days n, -d n    El programa mostrara los datos de los ultimos n dias 
+                        (por defecto n=30). 
+	  --group, -g       Mostrar los jobs del grupo (solo para investigadores).
 
 	Examples
-	  $ myjobs -g
+      $ myjobs -g
+      $ myjobs.simg -d 10
 `, {
         flags: {
             group: {
                 type: 'boolean',
                 default: false,
                 alias: 'g'
+            },
+            days:{
+                type:'number',
+                alias:'d',
+                default: 30,
+                isMultiple: false
             }
         }
     });
@@ -124,7 +133,7 @@ async function setup() {
     });
 
 
-    await table.setup(jobsTable, cli.input[0], cli.flags.group);
+    await table.setup(jobsTable, cli.input[0], cli.flags.group, cli.flags.days);
     
     screen.on('resize', function () {
         ramLine.emit('attach');

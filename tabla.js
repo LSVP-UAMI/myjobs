@@ -7,17 +7,18 @@ const client = new Client({ node: 'http://'+SLURMDB })
 
 let query = JSON.parse(fs.readFileSync('query.json'))
 var now = new Date().getTime()
-var mbefore = now - 2592000000
 
-exports.setup = async function (tabla, user, group) {
+exports.setup = async function (tabla, user, group, days) {
+    var mbefore = now - (86400000 * days)
     headers = ['JOBID', 'USUARIO', 'JOB']
-    if (user != undefined)
+    if (user != undefined){
         if (group) {
             query.query.bool.must = [{ term: { "groupname.keyword": user } }]
         } else {
             query.query.bool.must = [{ term: { "username.keyword": user } }]
             headers = ['JOBID', 'JOB']
         }
+    }
     query.query.bool.filter[0].range = {
         "@start": {
             "gte": mbefore,
