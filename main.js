@@ -94,7 +94,7 @@ async function setup() {
         , xPadding: 5
         , showLegend: true
         , wholeNumbersOnly: false
-        , label: 'CPU%'
+        , label: 'Promedio %CPU'
     });
 
     var ramLine = grid.set(4, 2, 3, 3, contrib.line, {
@@ -110,7 +110,7 @@ async function setup() {
         , xPadding: 5
         , showLegend: true
         , wholeNumbersOnly: false
-        , label: 'Ram%'
+        , label: 'Promedio %Ram'
     });
 
 
