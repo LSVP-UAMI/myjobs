@@ -14,18 +14,20 @@ setup().catch(console.log)
 
 async function setup() {
     const cli = meow(`
-	Usage
-	  $ myjobs [-g|--group]
+myjobs muestra el uso de recursos (CPU,RAM,SWAP) 
+de los jobs ejecutados en el cluster.
+Usage
+    $ myjobs [-g|--group][(-d|--days) n]
 
-    Options
-      --help, -h        Mostrar este mensaje de ayuda.
-      --days n, -d n    El programa mostrara los datos de los ultimos n dias 
-                        (por defecto n=30). 
-	  --group, -g       Mostrar los jobs del grupo (solo para investigadores).
+Options
+    --help, -h        Mostrar este mensaje de ayuda.
+    --days n, -d n    El programa mostrara los datos de los ultimos n dias 
+                    (por defecto n=30). 
+    --group, -g       Mostrar los jobs del grupo (solo para investigadores).
 
-	Examples
-      $ myjobs -g
-      $ myjobs.simg -d 10
+Examples
+    $ myjobs -g
+    $ myjobs -d 10
 `, {
         flags: {
             group: {
