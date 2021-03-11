@@ -20,10 +20,10 @@ Usage
     $ myjobs [-g|--group][(-d|--days) n]
 
 Options
-    --help, -h        Mostrar este mensaje de ayuda.
-    --days n, -d n    El programa mostrara los datos de los ultimos n dias 
+    --help, -h      Mostrar este mensaje de ayuda.
+    --days n, -d n  El programa mostrara los datos de los ultimos n dias 
                     (por defecto n=30). 
-    --group, -g       Mostrar los jobs del grupo (solo para investigadores).
+    --group, -g     Mostrar los jobs del grupo (solo para investigadores).
 
 Examples
     $ myjobs -g
